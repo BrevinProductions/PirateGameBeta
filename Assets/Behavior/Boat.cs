@@ -46,6 +46,7 @@ public class Boat : MonoBehaviour
             camera.GetComponent<Camera>().enabled = false;
             player.transform.GetChild(0).GetComponent<Camera>().enabled = true;
             playerBoarded = false;
+            timeCounter = 1;
         }
     }
 
@@ -59,7 +60,7 @@ public class Boat : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag.Equals("Player") && Input.GetKeyDown(KeyCode.B) && !playerBoarded)
+        if(other.gameObject.tag.Equals("Player") && Input.GetKey(KeyCode.B) && !playerBoarded && timeCounter <= 0)
         {
             //other.gameObject.GetComponent<Character>().boat = gameObject;
             camera.GetComponent<Camera>().enabled = true;
