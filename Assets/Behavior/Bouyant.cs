@@ -24,15 +24,7 @@ public class Bouyant : MonoBehaviour
         {
             rb.AddForce(new Vector3(0f, upwardForce, 0f));
             rb.AddForce(rb.velocity * -1 * drag);
-            rb.AddTorque(rb.angularVelocity * -1 * angularDrag);
+            rb.AddTorque(rb.angularVelocity * -1 * angularDrag * rb.mass);
         }
     }
-
-    //void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.tag.Equals("Water"))
-    //    {
-            
-    //    }
-    //}
 }
