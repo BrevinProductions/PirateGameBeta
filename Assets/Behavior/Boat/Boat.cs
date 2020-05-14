@@ -17,6 +17,7 @@ public class Boat : MonoBehaviour
     public float turnForce = 10;
 
     float timeCounter;
+    float timeCounter2;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +28,13 @@ public class Boat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //count down
         if (timeCounter > 0)
             timeCounter -= Time.deltaTime;
+        if (timeCounter2 > 0)
+            timeCounter2 -= Time.deltaTime;
 
+        //allow dismount
         if (playerBoarded && timeCounter <= 0)
         {
             debug.text = "press b to dismount";
@@ -53,19 +58,25 @@ public class Boat : MonoBehaviour
         //Ship Control
         if (playerBoarded)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) && !anchorRaised && timeCounter2 <= 0)
             {
                 anchorRaised = true;
+                timeCounter2 = 1;
+            }
+            if(timeCounter2 <= 0 && Input.GetKeyDown(KeyCode.R) && anchorRaised)
+            {
+                anchorRaised = false;
+                timeCounter2 = 1;
             }
             if (anchorRaised)
             {
                 rb.AddRelativeForce(Vector3.forward * forwardForce);
             }
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D) && Math.Sqrt(Math.Pow(rb.velocity.x, 2) + Math.Pow(rb.velocity.y, 2)) > 0.02)
             {
                 rb.AddTorque(Vector3.up * turnForce);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) && Math.Sqrt(Math.Pow(rb.velocity.x, 2) + Math.Pow(rb.velocity.y, 2)) > 0.02)
             {
                 rb.AddTorque(Vector3.up * turnForce * -1);
             }
