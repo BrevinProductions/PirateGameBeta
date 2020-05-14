@@ -6,7 +6,7 @@ public class Character : MonoBehaviour
 {
     // Start is called before the first frame update
     Rigidbody rb;
-    
+    public GameObject boat;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
