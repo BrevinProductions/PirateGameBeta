@@ -59,6 +59,7 @@
      <Compile Include="Assets\Behavior\Boat\BoatCamera.cs" />
      <Compile Include="Assets\Behavior\Bouyant.cs" />
      <Compile Include="Assets\Behavior\Character.cs" />
+     <Compile Include="Assets\Behavior\Environment\Dock.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\PauseMenu.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\SceneAndURLLoader.cs" />
