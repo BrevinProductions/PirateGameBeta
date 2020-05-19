@@ -195,6 +195,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f69c5f42ddbf9c448b774a13d31d4ea6, type: 3}
+--- !u!4 &500585243 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 35198332891420478, guid: 5092cf47c357e1648936b547cff7a344,
+    type: 3}
+  m_PrefabInstance: {fileID: 35198333323755607}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &516527735
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,7 +1417,7 @@ PrefabInstance:
         type: 3}
       propertyPath: debug
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 983481566}
     - target: {fileID: 35198333002540700, guid: 5092cf47c357e1648936b547cff7a344,
         type: 3}
       propertyPath: m_Enabled
@@ -1421,7 +1427,7 @@ PrefabInstance:
         type: 3}
       propertyPath: pCamera
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 500585243}
     - target: {fileID: 35198333002540700, guid: 5092cf47c357e1648936b547cff7a344,
         type: 3}
       propertyPath: turnForce
@@ -1437,7 +1443,8 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ship
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 35198333002540700, guid: 5092cf47c357e1648936b547cff7a344, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5092cf47c357e1648936b547cff7a344, type: 3}
 --- !u!1001 &7402190646101442959
 PrefabInstance:

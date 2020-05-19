@@ -10,9 +10,7 @@ public class BoatState : MonoBehaviour {
   //TODO: 
   //ADD STATE_RUN_AGGROUND
   //IMPLEMENT DOCKING SEQUENCE
-  //TEST RUDDER TURNS
-  //ADD PLAYER BOARDING AND DISMOUNTING
-  //NERF TURNING AMOUNT
+  //ADD PLAYER DISMOUNTING
   //
 
   Rigidbody rigidbody;
@@ -41,8 +39,8 @@ public class BoatState : MonoBehaviour {
     repaired = false;
   }
 
-  byte rudderAngle = 0; //how far the rudder is turned
-  byte maxRudderAngle = 80; //how far the rudder can turn
+  float rudderAngle = 0; //how far the rudder is turned
+  byte maxRudderAngle = 8; //how far the rudder can turn
   bool piloted = false; //if the ship has a captain at the helm
 
 
@@ -62,8 +60,7 @@ public class BoatState : MonoBehaviour {
   
   //defines repaired state
   public bool repaired = true;
-
-    bool canDock;
+  bool canDock;
 
   enum RudderState : byte {
     STATE_RUDDER_CENTER,
@@ -130,40 +127,47 @@ public class BoatState : MonoBehaviour {
         if (Input.GetKey(KeyCode.D))
         {
             if (rudderState == RudderState.STATE_RUDDER_LEFT && rudderAngle > 0)
-              rudderAngle--;
+              rudderAngle -= 2.0f * Time.deltaTime;
             else if (rudderState == RudderState.STATE_RUDDER_CENTER)
             {
-              rudderAngle++;
+              rudderAngle += 1.0f * Time.deltaTime;
               rudderState = RudderState.STATE_RUDDER_RIGHT;
             }
+            else if(rudderState == RudderState.STATE_RUDDER_RIGHT)
+              rudderAngle += 1.0f * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.A))
         {
           if (rudderState == RudderState.STATE_RUDDER_RIGHT && rudderAngle > 0)
-            rudderAngle--;
+            rudderAngle -= 2.0f * Time.deltaTime;
           else if (rudderState == RudderState.STATE_RUDDER_CENTER)
-            {
-              rudderAngle++;
+          {
+              rudderAngle += 1.0f * Time.deltaTime;
               rudderState = RudderState.STATE_RUDDER_LEFT;
-            }
+          }
+          else if(rudderState == RudderState.STATE_RUDDER_LEFT)
+            rudderAngle += 1.0f * Time.deltaTime;
         }
         else
-          rudderAngle--;
+          rudderAngle -= 1.0f * Time.deltaTime;
         
-        rudderAngle = (byte)Clamp(maxRudderAngle, 0, rudderAngle);
+        rudderAngle = (float)Clamp(maxRudderAngle, 0, rudderAngle);
 
         switch (rudderState)
         {
           case RudderState.STATE_RUDDER_CENTER:
-            //handle move forward (kill rotation)
-            rigidbody.AddTorque(rigidbody.angularVelocity * -5);
+            //handle move forward and kill rotation
+            //rigidbody.angularVelocity = Vector3.zero;
+            rigidbody.AddTorque(rigidbody.angularVelocity * -20);
             break;
           case RudderState.STATE_RUDDER_RIGHT:
             rigidbody.AddTorque(Vector3.up * rudderAngle);
+            text.text = rudderAngle.ToString();
             //handle right turn
             break;
           case RudderState.STATE_RUDDER_LEFT:
             rigidbody.AddTorque(Vector3.up * rudderAngle * -1);
+            text.text = rudderAngle.ToString();
             //handle right turn
             break;
           default:
