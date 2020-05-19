@@ -12,6 +12,7 @@ public class BoatState : MonoBehaviour {
   //IMPLEMENT DOCKING SEQUENCE
   //TEST RUDDER TURNS
   //ADD PLAYER BOARDING AND DISMOUNTING
+  //NERF TURNING AMOUNT
   //
 
   Rigidbody rigidbody;
@@ -78,9 +79,12 @@ public class BoatState : MonoBehaviour {
   }
 
   // Update is called once per frame
-  void Update () {
-    cooldown -= Time.deltaTime;
-    
+  void Update () 
+  {
+    if(cooldown > 0)
+    {
+      cooldown -= Time.deltaTime;
+    }
 
     switch (moveState) {
       case MovementState.STATE_DOCKED:
@@ -116,40 +120,43 @@ public class BoatState : MonoBehaviour {
         }
 
         //ensure rudder cannot turn past 80:
-        rudderAngle = (byte)Clamp(maxRudderAngle, 0, rudderAngle);
-        rigidbody.AddForce(Vector3.forward * windForce);
+        
+        rigidbody.AddRelativeForce(Vector3.forward * windForce);
 
-        if(rudderAngle == 0){
+        if(rudderAngle == 0)
+        {
           rudderState = RudderState.STATE_RUDDER_CENTER;
         }
-                if (Input.GetKey(KeyCode.D))
-                {
-                    if (rudderState == RudderState.STATE_RUDDER_LEFT && rudderAngle > 0)
-                        rudderAngle--;
-                    else if (rudderState == RudderState.STATE_RUDDER_CENTER)
-                    {
-                        rudderAngle++;
-                        rudderState = RudderState.STATE_RUDDER_RIGHT;
-                    }
-                }
-                else if (Input.GetKey(KeyCode.A))
-                {
-                    if (rudderState == RudderState.STATE_RUDDER_RIGHT && rudderAngle > 0)
-                        rudderAngle--;
-                    else if (rudderState == RudderState.STATE_RUDDER_CENTER)
-                    {
-                        rudderAngle++;
-                        rudderState = RudderState.STATE_RUDDER_LEFT;
-                    }
-                }
-                else
-                    rudderAngle--;
+        if (Input.GetKey(KeyCode.D))
+        {
+            if (rudderState == RudderState.STATE_RUDDER_LEFT && rudderAngle > 0)
+              rudderAngle--;
+            else if (rudderState == RudderState.STATE_RUDDER_CENTER)
+            {
+              rudderAngle++;
+              rudderState = RudderState.STATE_RUDDER_RIGHT;
+            }
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+          if (rudderState == RudderState.STATE_RUDDER_RIGHT && rudderAngle > 0)
+            rudderAngle--;
+          else if (rudderState == RudderState.STATE_RUDDER_CENTER)
+            {
+              rudderAngle++;
+              rudderState = RudderState.STATE_RUDDER_LEFT;
+            }
+        }
+        else
+          rudderAngle--;
+        
+        rudderAngle = (byte)Clamp(maxRudderAngle, 0, rudderAngle);
 
         switch (rudderState)
         {
           case RudderState.STATE_RUDDER_CENTER:
             //handle move forward (kill rotation)
-            rigidbody.AddTorque(rigidbody.angularVelocity * -1);
+            rigidbody.AddTorque(rigidbody.angularVelocity * -5);
             break;
           case RudderState.STATE_RUDDER_RIGHT:
             rigidbody.AddTorque(Vector3.up * rudderAngle);
@@ -213,6 +220,7 @@ public class BoatState : MonoBehaviour {
     }
   }
 
+
   void OnTriggerEnter(Collider other){
     if(other.gameObject.tag.Equals("Player")){
       text.text = "Press b to board";
@@ -242,9 +250,9 @@ public class BoatState : MonoBehaviour {
 
   T Clamp<T>(T max, T min, T val) where T : IComparable<T>
   {
-    if(max.CompareTo(val) > 0)
+    if(val.CompareTo(max) > 0)
       return max;
-    else if(min.CompareTo(val) < 0)
+    else if(val.CompareTo(min) < 0)
       return min;
     else
       return val;
