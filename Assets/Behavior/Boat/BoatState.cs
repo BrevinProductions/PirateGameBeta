@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +60,9 @@ public class BoatState : MonoBehaviour {
   public Text text;
   
   //defines repaired state
-  public bool repaired = true; 
+  public bool repaired = true;
+
+    bool canDock;
 
   enum RudderState : byte {
     STATE_RUDDER_CENTER,
@@ -76,6 +79,9 @@ public class BoatState : MonoBehaviour {
 
   // Update is called once per frame
   void Update () {
+    cooldown -= Time.deltaTime;
+    
+
     switch (moveState) {
       case MovementState.STATE_DOCKED:
         //test for undocking input and handle
@@ -93,7 +99,8 @@ public class BoatState : MonoBehaviour {
           unanchorCount = 10;
         }
         break;
-      case MovementState.STATE_MOVING:
+      
+       case MovementState.STATE_MOVING:
         //test for input for docking
         if(canDock && Input.GetKey(KeyCode.R))
         {
@@ -103,58 +110,65 @@ public class BoatState : MonoBehaviour {
         //if docking
         //test for input for anchoring
         else if(Input.GetKey(KeyCode.R)){
-          moveState = STATE_ANCHORING;
+          moveState = MovementState.STATE_ANCHORING;
           anchorCount = 10;
           break;
         }
 
         //ensure rudder cannot turn past 80:
         rudderAngle = (byte)Clamp(maxRudderAngle, 0, rudderAngle);
-        rigidbody.ApplyForce(Vector3.forward * windForce);
+        rigidbody.AddForce(Vector3.forward * windForce);
 
         if(rudderAngle == 0){
           rudderState = RudderState.STATE_RUDDER_CENTER;
         }
-        if(Input.GetKey(KeyCode.D)){
-          if(rudderState == RudderState.STATE_RUDDER_LEFT && rudderAngle > 0)
-            rudderAngle--;
-          else if(rudderState == RudderState.STATE_RUDDER_CENTER){
-            rudderAngle ++;
-            rudderState = RudderState.STATE_RUDDER_RIGHT;
-          }
-        }
-        if(Input.GetKey(KeyCode.A)){
-          if(rudderState == RudderState.STATE_RUDDER_RIGHT && rudderAngle > 0)
-            rudderAngle--;
-          else if(rudderState == RudderState.STATE_RUDDER_CENTER){
-            rudderAngle ++;
-            rudderState = RudderState.STATE_RUDDER_LEFT;
-          }
-        }
+                if (Input.GetKey(KeyCode.D))
+                {
+                    if (rudderState == RudderState.STATE_RUDDER_LEFT && rudderAngle > 0)
+                        rudderAngle--;
+                    else if (rudderState == RudderState.STATE_RUDDER_CENTER)
+                    {
+                        rudderAngle++;
+                        rudderState = RudderState.STATE_RUDDER_RIGHT;
+                    }
+                }
+                else if (Input.GetKey(KeyCode.A))
+                {
+                    if (rudderState == RudderState.STATE_RUDDER_RIGHT && rudderAngle > 0)
+                        rudderAngle--;
+                    else if (rudderState == RudderState.STATE_RUDDER_CENTER)
+                    {
+                        rudderAngle++;
+                        rudderState = RudderState.STATE_RUDDER_LEFT;
+                    }
+                }
+                else
+                    rudderAngle--;
 
         switch (rudderState)
         {
           case RudderState.STATE_RUDDER_CENTER:
             //handle move forward (kill rotation)
-            rigidbody.ApplyTorque(rigidbody.angularVelocity * -1);
+            rigidbody.AddTorque(rigidbody.angularVelocity * -1);
             break;
           case RudderState.STATE_RUDDER_RIGHT:
-            rigidbody.ApplyTorque(Vector3.up * rudderAngle);
+            rigidbody.AddTorque(Vector3.up * rudderAngle);
             //handle right turn
             break;
           case RudderState.STATE_RUDDER_LEFT:
-            rigidbody.ApplyTorque(Vector3.up * rudderAngle * -1);
+            rigidbody.AddTorque(Vector3.up * rudderAngle * -1);
             //handle right turn
             break;
           default:
             break;
         }
+      break;
       case MovementState.STATE_ANCHORING:
         //handle anchoring
         anchorCount -= Time.deltaTime;
         //test for anchoring finished and switch to anchored
         if(anchorCount <= 0)
-          moveState = STATE_ANCHORED;
+          moveState = MovementState.STATE_ANCHORED;
         break;
       case MovementState.STATE_DOCKING:
         //handle docking
@@ -221,10 +235,12 @@ public class BoatState : MonoBehaviour {
       piloted = true;
       player.SetActive(false);
       text.text = "";
+      cooldown = 2;
+      transform.GetChild(0).GetComponent<Camera>().enabled = true;
     }
   }
 
-  T Clamp(T max, T min, T val) where T : IComparable
+  T Clamp<T>(T max, T min, T val) where T : IComparable<T>
   {
     if(max.CompareTo(val) > 0)
       return max;
