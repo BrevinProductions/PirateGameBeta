@@ -78,6 +78,8 @@ public class BoatState : MonoBehaviour {
   // Update is called once per frame
   void Update () 
   {
+    //text.text = "";
+
     if(cooldown > 0)
     {
       cooldown -= Time.deltaTime;
@@ -177,6 +179,7 @@ public class BoatState : MonoBehaviour {
       case MovementState.STATE_ANCHORING:
         //handle anchoring
         anchorCount -= Time.deltaTime;
+        text.text = anchorCount.ToString();
         //test for anchoring finished and switch to anchored
         if(anchorCount <= 0)
           moveState = MovementState.STATE_ANCHORED;
@@ -189,6 +192,7 @@ public class BoatState : MonoBehaviour {
       case MovementState.STATE_UNANCHOR:
         //handle unanchoring
         unanchorCount -= Time.deltaTime;
+        text.text = unanchorCount.ToString();
         //test for process finished and switch to moving
         if(unanchorCount <= 0)
           moveState = MovementState.STATE_MOVING;

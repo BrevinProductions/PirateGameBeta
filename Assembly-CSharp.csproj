@@ -60,8 +60,9 @@
      <Compile Include="Assets\Behavior\Boat\BoatState.cs" />
      <Compile Include="Assets\Behavior\Bouyant.cs" />
      <Compile Include="Assets\Behavior\Character.cs" />
-     <Compile Include="Assets\Behavior\Environment\Crate.cs" />
-     <Compile Include="Assets\Behavior\Environment\Dock.cs" />
+     <Compile Include="Assets\Behavior\Environment\Buoyancy.cs" />
+     <Compile Include="Assets\Behavior\Environment\Dock\Dock.cs" />
+     <Compile Include="Assets\Behavior\Environment\Items\Crate.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\PauseMenu.cs" />
      <Compile Include="Assets\SampleScenes\Menu\Scripts\SceneAndURLLoader.cs" />
