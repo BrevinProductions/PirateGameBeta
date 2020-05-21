@@ -8,6 +8,9 @@ public class Buoyancy : MonoBehaviour
     Rigidbody rb;
     GameObject waterPlane;
     bool waterPlaneSet;
+    public float upwardForce = 30f;
+    public float dragForce = 10;
+    public float angDragForce = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +23,12 @@ public class Buoyancy : MonoBehaviour
     {
         if(waterPlaneSet)
         {
-
+            if(gameObject.transform.position.y < waterPlane.transform.position.y)
+            {
+                rb.AddForce(Vector3.up * upwardForce);
+                rb.AddForce(rb.velocity * -1 * dragForce);
+                rb.AddTorque(rb.angularVelocity * -1 * angDragForce);
+            }
         }
     }
 
