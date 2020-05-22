@@ -73,6 +73,7 @@ public class BoatState : MonoBehaviour {
     moveState = MovementState.STATE_ANCHORED;
     rudderState = RudderState.STATE_RUDDER_CENTER;
     rigidbody = gameObject.GetComponent<Rigidbody>();
+    transform.GetChild(0).GetComponent<BoatCamera>().enabled = false;
   }
 
   // Update is called once per frame
@@ -253,6 +254,7 @@ public class BoatState : MonoBehaviour {
       text.text = "";
       cooldown = 2;
       transform.GetChild(0).GetComponent<Camera>().enabled = true;
+      transform.GetChild(0).GetComponent<BoatCamera>().enabled = true;
     }
   }
 
