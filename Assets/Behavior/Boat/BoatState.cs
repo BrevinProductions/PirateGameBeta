@@ -60,7 +60,7 @@ public class BoatState : MonoBehaviour {
   
   //defines repaired state
   public bool repaired = true;
-  bool canDock;
+  bool canDock = false;
 
   enum RudderState : byte {
     STATE_RUDDER_CENTER,
@@ -81,6 +81,8 @@ public class BoatState : MonoBehaviour {
   {
     //text.text = "";
 
+    Dismount(Input.GetKey(KeyCode.B));
+
     if(cooldown > 0)
     {
       cooldown -= Time.deltaTime;
@@ -92,7 +94,7 @@ public class BoatState : MonoBehaviour {
         if(piloted && Input.GetKey(KeyCode.R)){
           moveState = MovementState.STATE_UNDOCK;
           //set count to undock
-          undockCount = 20;
+          undockCount = 10;
         }
         break;
       case MovementState.STATE_ANCHORED:
@@ -100,7 +102,7 @@ public class BoatState : MonoBehaviour {
         if(piloted && Input.GetKey(KeyCode.R)){
           moveState = MovementState.STATE_UNANCHOR;
           //set time to unanchor
-          unanchorCount = 10;
+          unanchorCount = 5;
         }
         break;
       
@@ -186,6 +188,8 @@ public class BoatState : MonoBehaviour {
           moveState = MovementState.STATE_ANCHORED;
         break;
       case MovementState.STATE_DOCKING:
+        rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX;
+        moveState = MovementState.STATE_DOCKED;
         //handle docking
         //move to docked position
         //test for docking finished and switch to docked
@@ -235,10 +239,16 @@ public class BoatState : MonoBehaviour {
       text.text = "Press b to board";
       player = other.gameObject;
     }
+    if(other.gameObject.tag.Equals("Dock") && piloted){
+      text.text = "Press b to Dock";
+    }
   }
 
   void OnTriggerExit(Collider other){
     if(other.gameObject.tag.Equals("Player")){
+      text.text = "";
+    }
+    if(other.gameObject.tag.Equals("Dock") && piloted){
       text.text = "";
     }
   }
@@ -256,6 +266,10 @@ public class BoatState : MonoBehaviour {
       transform.GetChild(0).GetComponent<Camera>().enabled = true;
       transform.GetChild(0).GetComponent<BoatCamera>().enabled = true;
     }
+    if(other.gameObject.tag.Equals("Dock") && piloted){
+      text.text = "Press b to Dock";
+      canDock = true;
+    }
   }
 
   T Clamp<T>(T max, T min, T val) where T : IComparable<T>
@@ -266,5 +280,19 @@ public class BoatState : MonoBehaviour {
       return min;
     else
       return val;
+  }
+
+  void Dismount(bool input)
+  {
+    if(moveState <= MovementState.STATE_UNDOCK && piloted && input && cooldown <= 0)
+    {
+      cooldown = 2;
+      piloted = false;
+      player.SetActive(true);
+      player.transform.position = transform.position + Vector3.up;
+      player.transform.rotation = transform.rotation;
+      player.transform.GetChild(0).GetComponent<Camera>().enabled = true;
+      transform.GetChild(0).GetComponent<Camera>().enabled = false;
+    }
   }
 }
