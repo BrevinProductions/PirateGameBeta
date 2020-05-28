@@ -419,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db08f2cfaa6c2d2488015b4ee4b05f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windForce: 20
+  windForce: 100
   text: {fileID: 983481566}
   repaired: 1
 --- !u!64 &700799783

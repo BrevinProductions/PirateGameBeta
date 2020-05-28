@@ -29,6 +29,7 @@ public class BoatState : MonoBehaviour {
 
   MovementState moveState;
   RudderState rudderState;
+  Vector3 boatPosition;
 
   GameObject player;
 
@@ -74,6 +75,7 @@ public class BoatState : MonoBehaviour {
     rudderState = RudderState.STATE_RUDDER_CENTER;
     rigidbody = gameObject.GetComponent<Rigidbody>();
     transform.GetChild(0).GetComponent<BoatCamera>().enabled = false;
+    boatPosition = transform.position;
   }
 
   // Update is called once per frame
@@ -81,6 +83,7 @@ public class BoatState : MonoBehaviour {
   {
     //text.text = "";
 
+    boatPosition = transform.position;
     Dismount(Input.GetKey(KeyCode.B));
 
     if(cooldown > 0)
@@ -288,9 +291,10 @@ public class BoatState : MonoBehaviour {
     {
       cooldown = 2;
       piloted = false;
+      
+      player.transform.SetPositionAndRotation(boatPosition + Vector3.up, gameObject.transform.rotation);
       player.SetActive(true);
-      player.transform.position = transform.position + Vector3.up;
-      player.transform.rotation = transform.rotation;
+      //player.transform.rotation = transform.rotation;
       player.transform.GetChild(0).GetComponent<Camera>().enabled = true;
       transform.GetChild(0).GetComponent<Camera>().enabled = false;
     }
