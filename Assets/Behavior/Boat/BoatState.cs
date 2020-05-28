@@ -10,7 +10,7 @@ public class BoatState : MonoBehaviour {
   //TODO: 
   //ADD STATE_RUN_AGGROUND
   //IMPLEMENT DOCKING SEQUENCE
-  //ADD PLAYER DISMOUNTING
+  // ^ sort of done
   //
 
   Rigidbody rigidbody;
