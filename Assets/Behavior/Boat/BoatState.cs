@@ -243,7 +243,7 @@ public class BoatState : MonoBehaviour {
       player = other.gameObject;
     }
     if(other.gameObject.tag.Equals("Dock") && piloted){
-      text.text = "Press b to Dock";
+      text.text = "Press r to Dock";
     }
   }
 
@@ -270,7 +270,7 @@ public class BoatState : MonoBehaviour {
       transform.GetChild(0).GetComponent<BoatCamera>().enabled = true;
     }
     if(other.gameObject.tag.Equals("Dock") && piloted){
-      text.text = "Press b to Dock";
+      text.text = "Press r to Dock";
       canDock = true;
     }
   }

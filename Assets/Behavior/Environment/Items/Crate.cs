@@ -7,6 +7,7 @@ public class Crate : MonoBehaviour
 {
     Rigidbody rb;
     public Text text;
+    public GameObject item;
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +33,10 @@ public class Crate : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && Input.GetKey(KeyCode.E))
         {
-            Instantiate(gameObject, transform.position + Vector3.up, transform.rotation);
-            gameObject.SetActive(false);
+            Instantiate(item, transform.position + Vector3.up, transform.rotation);
+            text.text = "";
+            //gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 
