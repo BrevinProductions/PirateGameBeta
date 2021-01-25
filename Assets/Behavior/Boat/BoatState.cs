@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BoatState : MonoBehaviour {
 
   //
-  //TODO: 
+  //TODO:
   //ADD STATE_RUN_AGGROUND
   //IMPLEMENT DOCKING SEQUENCE
   // ^ sort of done
@@ -58,7 +58,7 @@ public class BoatState : MonoBehaviour {
   public const float maxSinkTime = 120;
   public float windForce = 20;
   public Text text;
-  
+
   //defines repaired state
   public bool repaired = true;
   bool canDock = false;
@@ -79,7 +79,7 @@ public class BoatState : MonoBehaviour {
   }
 
   // Update is called once per frame
-  void Update () 
+  void Update ()
   {
     //text.text = "";
 
@@ -108,7 +108,7 @@ public class BoatState : MonoBehaviour {
           unanchorCount = 5;
         }
         break;
-      
+
        case MovementState.STATE_MOVING:
         //test for input for docking
         if(canDock && Input.GetKey(KeyCode.R))
@@ -125,7 +125,7 @@ public class BoatState : MonoBehaviour {
         }
 
         //ensure rudder cannot turn past 80:
-        
+
         rigidbody.AddRelativeForce(Vector3.forward * windForce);
 
         if(rudderAngle == 0)
@@ -158,7 +158,7 @@ public class BoatState : MonoBehaviour {
         }
         else
           rudderAngle -= 1.0f * Time.deltaTime;
-        
+
         rudderAngle = (float)Clamp(maxRudderAngle, 0, rudderAngle);
 
         switch (rudderState)
@@ -191,7 +191,9 @@ public class BoatState : MonoBehaviour {
           moveState = MovementState.STATE_ANCHORED;
         break;
       case MovementState.STATE_DOCKING:
-        rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX;
+        rigidbody.constraints = RigidbodyConstraints.FreezePositionZ |
+        RigidbodyConstraints.FreezePositionX;
+
         moveState = MovementState.STATE_DOCKED;
         //handle docking
         //move to docked position
@@ -257,8 +259,8 @@ public class BoatState : MonoBehaviour {
   }
 
   void OnTriggerStay(Collider other){
-    if(other.gameObject.tag.Equals("Player") && 
-    Input.GetKey(KeyCode.B) && 
+    if(other.gameObject.tag.Equals("Player") &&
+    Input.GetKey(KeyCode.B) &&
     cooldown <= 0)
     {
       //set camera
@@ -287,12 +289,14 @@ public class BoatState : MonoBehaviour {
 
   void Dismount(bool input)
   {
-    if(moveState <= MovementState.STATE_UNDOCK && piloted && input && cooldown <= 0)
+    if(moveState <= MovementState.STATE_UNDOCK && piloted && input &&
+    cooldown <= 0)
     {
       cooldown = 2;
       piloted = false;
-      
-      player.transform.SetPositionAndRotation(boatPosition + Vector3.up, gameObject.transform.rotation);
+
+      player.transform.SetPositionAndRotation(boatPosition + Vector3.up,
+      gameObject.transform.rotation);
       player.SetActive(true);
       //player.transform.rotation = transform.rotation;
       player.transform.GetChild(0).GetComponent<Camera>().enabled = true;

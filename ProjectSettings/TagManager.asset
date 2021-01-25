@@ -8,6 +8,7 @@ TagManager:
   - Water
   - Dock
   - Ship
+  - Sword
   layers:
   - Default
   - TransparentFX
